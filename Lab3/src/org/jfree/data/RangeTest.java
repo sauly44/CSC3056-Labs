@@ -1,5 +1,7 @@
 package org.jfree.data;
 
+import static org.junit.Assert.assertThrows;
+
 import org.jfree.data.Range;
 import org.junit.After;
 import org.junit.Before;
@@ -168,5 +170,84 @@ public class RangeTest extends TestCase {
 			assertEquals("Upper bound of -2 to 0 should be 0",
 					0, upperbound, 0.000000001d);
 	}	
-	
+		
+		//test intersects
+		@Test
+		public void testIntersectsSecondLowerBoundIsLower() {
+			Range r1 = new Range(3,5);
+			boolean intersects = r1.intersects(2, 4);
+			assertTrue(intersects);
+		}
+		@Test
+		public void testIntersectsSecondBothBoundIsLower() {
+			Range r1 = new Range(3,5);
+			boolean intersects = r1.intersects(1, 2);
+			assertFalse(intersects);
+		}
+		@Test
+		public void testIntersectsWhenSecondRangeInsideFirst() {
+			Range r1 = new Range(3,8);
+			boolean intersects = r1.intersects(4, 6);
+			assertTrue(intersects);
+		}
+		@Test
+		public void testIntersectsWhenOnlyUpperInBetweenInitialBounds() {
+			Range r1 = new Range(5,10);
+			boolean intersects = r1.intersects(6, 8);
+			assertFalse(intersects);
+		}
+		//Test Range
+		@Test
+		public void testRangeLowerBoundHigherThanUpper() {
+			assertThrows(IllegalArgumentException.class, () -> {new Range(8,5);} );
+		}
+		
+		//Test getLowerBound
+		@Test
+		public void testGetLowerBound() {
+			Range r1 = new Range(3,5);
+			double lowerbound = r1.getLowerBound();
+			assertEquals(3, lowerbound, 0.000000001d);
+		}
+		
+		//Test combine
+		@Test
+		public void testCombine2Ranges() {
+			Range r1 = new Range(3,5);
+			Range r2 = new Range(7,9);
+			Range r3 = new Range(3,9);
+			assertEquals(r3, Range.combine(r1, r2));
+		}
+		@Test
+		public void testCombineRange1Null() {
+			Range r1 = new Range(7,9);
+			assertEquals(r1, Range.combine(null, r1));
+		}
+		@Test
+		public void testCombineRange2Null() {
+			Range r1 = new Range(3,5);
+			assertEquals(r1, Range.combine(r1, null));
+		}
+		
+		//Shift
+		@Test
+		public void testShiftWithAllow0Crossing() {
+			Range r1 = new Range(-4,5);
+			Range r2 = new Range(6,15);
+			assertEquals(r2, Range.shift(r1, 10, true));
+		}
+		
+		@Test
+		public void testShiftWithoutAllow0Crossing() {
+			Range r1 = new Range(-4,2);
+			Range r2 = new Range(0,12);
+			assertEquals(r2, Range.shift(r1, 10, false));
+		}
+		
+		@Test
+		public void testShiftValueOnZero() {
+			Range r1 = new Range(0,5);
+			Range r2 = new Range(-10,0);
+			assertEquals(r2, Range.shift(r1, 10));
+		}
 }
