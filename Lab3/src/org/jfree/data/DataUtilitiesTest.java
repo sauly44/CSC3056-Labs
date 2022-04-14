@@ -1,19 +1,18 @@
 package org.jfree.data;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
 
-import java.security.InvalidParameterException;
-import org.jfree.data.DataUtilities;
-import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.DefaultKeyedValues2D;
-import org.jfree.data.KeyedValues;
 import org.jfree.data.Values2D;
+import org.jfree.data.DataUtilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DataUtilitiesTest {
+import junit.framework.TestCase;
+
+import java.security.InvalidParameterException;
+
+
+public class DataUtilitiesTest extends TestCase {
 
   private Values2D values2D;
 
@@ -31,7 +30,7 @@ public class DataUtilitiesTest {
   }
 
   @Test
-  public void testValidDataAndColumnColumnTotal() {
+  public void testValidDataAndColumnTotal() {
     assertEquals(5.0, DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001d);
   }
 
@@ -59,11 +58,14 @@ public class DataUtilitiesTest {
 
   @Test
   public void testCalculateColumnTotalWithNullDataShouldReturn0(){
-    assertThrows(InvalidParameterException.class, () -> DataUtilities.calculateColumnTotal(null, 0));
+	  try {
+		  DataUtilities.calculateColumnTotal(null, 0);
+		  fail("No exception was thrown. InvalidParameterException was expected.");
+	  } catch (Exception e) {
+		  assertTrue("Correct exception type thrown", e.getClass().equals(InvalidParameterException.class)); 
+	  }
   }
-
-
-  //calculateRowTotal Tests
+//calculateRowTotal Tests
   @Test
   public void testCalculateRowWithValidDataShouldReturnCorrectTotal() {
     DefaultKeyedValues2D testValues2D = new DefaultKeyedValues2D();
@@ -96,7 +98,12 @@ public class DataUtilitiesTest {
 
   @Test
   public void testCalculateRowTotalWithNullDataShouldReturnThrowInvalidParameterException(){
-    assertThrows(InvalidParameterException.class, () -> DataUtilities.calculateRowTotal(null, 0));
+	  try {
+		  DataUtilities.calculateRowTotal(null, 0);
+		  fail("No exception was thrown. InvalidParameterException was expected.");
+	  } catch (Exception e) {
+		  assertTrue("Correct exception type thrown", e.getClass().equals(InvalidParameterException.class)); 
+	  }
   }
 
   //createNumberArray Tests
@@ -123,7 +130,12 @@ public class DataUtilitiesTest {
 
   @Test
   public void testCreateNumberArrayWithNullArrayShouldReturnThrowInvalidParameterException(){
-    assertThrows(InvalidParameterException.class, () -> DataUtilities.createNumberArray(null));
+    try {
+		  DataUtilities.createNumberArray(null);
+		  fail("No exception was thrown. InvalidParameterException was expected.");
+	  } catch (Exception e) {
+		  assertTrue("Correct exception type thrown", e.getClass().equals(InvalidParameterException.class)); 
+	  }
   }
 
   //createNumberArray2D Tests
@@ -156,7 +168,12 @@ public class DataUtilitiesTest {
 
   @Test
   public void testCreateNumberArray2DWithNullArrayShouldReturnThrowInvalidParameterException(){
-    assertThrows(InvalidParameterException.class, () -> DataUtilities.createNumberArray2D(null));
+	  try {
+		  DataUtilities.createNumberArray2D(null);
+		  fail("No exception was thrown. InvalidParameterException was expected.");
+	  } catch (Exception e) {
+		  assertTrue("Correct exception type thrown", e.getClass().equals(InvalidParameterException.class)); 
+	  }
   }
 
   //getCumulativePercentages Tests
@@ -212,6 +229,11 @@ public class DataUtilitiesTest {
 
   @Test
   public void testGetCumulativePercentagesWithNullDataThrowsInvalidParameterException(){
-    assertThrows(InvalidParameterException.class, () -> DataUtilities.getCumulativePercentages(null));
+	  try {
+		  DataUtilities.getCumulativePercentages(null);
+		  fail("No exception was thrown. InvalidParameterException was expected.");
+	  } catch (Exception e) {
+		  assertTrue("Correct exception type thrown", e.getClass().equals(InvalidParameterException.class)); 
+	  }
   }
 }
