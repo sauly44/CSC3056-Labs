@@ -59,7 +59,7 @@ public class DataUtilitiesTest extends TestCase {
   }
 
   @Test
-  public void testCalculateColumnTotalWithNullDataShouldReturn0(){
+  public void testCalculateColumnTotalWithNullDataShouldThrowInvalidParameterException(){
 	  try {
 		  DataUtilities.calculateColumnTotal(null, 0);
 		  fail("No exception was thrown. InvalidParameterException was expected.");
@@ -131,7 +131,7 @@ public class DataUtilitiesTest extends TestCase {
   }
 
   @Test
-  public void testCreateNumberArrayWithNullArrayShouldReturnThrowInvalidParameterException(){
+  public void testCreateNumberArrayWithNullArrayShouldThrowInvalidParameterException(){
     try {
 		  DataUtilities.createNumberArray(null);
 		  fail("No exception was thrown. InvalidParameterException was expected.");
@@ -169,7 +169,7 @@ public class DataUtilitiesTest extends TestCase {
   }
 
   @Test
-  public void testCreateNumberArray2DWithNullArrayShouldReturnThrowInvalidParameterException(){
+  public void testCreateNumberArray2DWithNullArrayShouldThrowInvalidParameterException(){
 	  try {
 		  DataUtilities.createNumberArray2D(null);
 		  fail("No exception was thrown. InvalidParameterException was expected.");
