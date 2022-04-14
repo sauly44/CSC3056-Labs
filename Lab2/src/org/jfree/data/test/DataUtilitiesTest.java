@@ -32,7 +32,7 @@ public class DataUtilitiesTest extends TestCase {
   }
 
   @Test
-  public void testValidDataAndColumnColumnTotal() {
+  public void testValidDataAndColumnTotal() {
     assertEquals(5.0, DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001d);
   }
 
