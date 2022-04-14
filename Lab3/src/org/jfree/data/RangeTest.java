@@ -1,5 +1,6 @@
 package org.jfree.data;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 
 import org.jfree.data.Range;
@@ -250,4 +251,228 @@ public class RangeTest extends TestCase {
 			Range r2 = new Range(-10,0);
 			assertEquals(r2, Range.shift(r1, 10));
 		}
+		
+		//constrain() Tests
+		  @Test
+		  public void testConstrainWithValueWithinRangeReturnsSpecifiedValue(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 5;
+		    assertEquals(testValue, testRange.constrain(testValue));
+		  }
+		  
+		  @Test
+		  public void testConstrainWithValueEqualToUpperBoundReturnsSpecifiedValue(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 8;
+		    assertEquals(testValue, testRange.constrain(testValue));
+		  }
+		  
+		  @Test
+		  public void testConstrainWithValueEqualToLowerBoundReturnsSpecifiedValue(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 1;
+		    assertEquals(testValue, testRange.constrain(testValue));
+		  }
+		  
+		  @Test
+		  public void testConstrainWithValueGreaterThanUpperBoundReturnsUpperBound(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 9;
+		    assertEquals(testRange.getUpperBound(), testRange.constrain(testValue));
+		  }
+		  
+		  @Test
+		  public void testConstrainWithValueLessThanLowerBoundReturnsLowerBound(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = -5;
+		    assertEquals(testRange.getLowerBound(), testRange.constrain(testValue));
+		  }
+
+		  //expandToInclude() Tests
+		  @Test
+		  public void testExpandToIncludeWithNullRangeReturnsNewRangeWithLowerAndUpperBoundOfValue(){
+		    double testValue = 5;
+		    Range expectedRange = new Range(testValue, testValue);
+		    assertEquals(expectedRange, Range.expandToInclude(null, testValue));
+		  }
+
+		  @Test
+		  public void testExpandToIncludeWithValueWithinRangeReturnsOriginalRange(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 5;
+		    assertEquals(testRange, Range.expandToInclude(testRange, testValue));
+		  }
+
+		  @Test
+		  public void testExpandToIncludeWithValueEqualToUpperBoundReturnsOriginalRange(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 8;
+		    assertEquals(testRange, Range.expandToInclude(testRange, testValue));
+		  }
+
+		  @Test
+		  public void testExpandsToIncludeWithValueEqualToLowerBoundReturnsOriginalRange(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 1;
+		    assertEquals(testRange, Range.expandToInclude(testRange, testValue));
+		  }
+
+		  @Test
+		  public void testExpandToIncludeWithValueGreaterThanUpperBoundReturnsRangeWithNewUpperBound(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = 9;
+		    Range expectedRange = new Range(1, testValue);
+		    assertEquals(expectedRange, Range.expandToInclude(testRange, testValue));
+		  }
+
+		  @Test
+		  public void testExpandToIncludeWithValueLessThanLowerBoundReturnsRangeWithNewLowerBound(){
+		    Range testRange = new Range(1, 8);
+		    double testValue = -5;
+		    Range expectedRange = new Range(testValue, 8);
+		    assertEquals(expectedRange, Range.expandToInclude(testRange, testValue));
+		  }
+
+		  //expand() Tests
+		  @Test
+		  public void testExpandWithNullRangeThrowsIllegalArgumentException(){
+		    assertThrows(IllegalArgumentException.class, () -> Range.expand(null, 0, 0));
+		  }
+
+		  @Test
+		  public void testExpandWithLowerMarginAndUpperMarginOf0ReturnsOriginalRange(){
+		    Range testRange = new Range(1, 8);
+		    double lowerMargin = 0;
+		    double upperMargin = 0;
+
+		    Range resultRange = Range.expand(testRange, lowerMargin, upperMargin);
+		    assertEquals(testRange, resultRange);
+		  }
+
+		  @Test
+		  public void testExpandWithRangeOfLength0ReturnsUnchangedRangeRegardlessOfMarginValues(){
+		    Range testRange = new Range(1,1);
+		    double lowerMargin = 100;
+		    double upperMargin = -0.65;
+
+		    Range resultRange = Range.expand(testRange, lowerMargin, upperMargin);
+		    assertEquals(0, testRange.getLength());
+		    assertEquals(testRange, resultRange);
+		    //Note: As both lowerMargin and upperMargin are expressed as percentages of the Range length (as per the javadocs),
+		    //      a range with the same upper and lower bound will not change with the expand method
+		  }
+
+		  @Test
+		  public void testExpandWithPositiveReturnsExpectedRange(){
+		    Range testRange = new Range(2, 6);
+		    double lowerMargin = 0.25;
+		    double upperMargin = 0.5;
+
+		    Range expectedRange = new Range(1,8);
+		    Range resultRange = Range.expand(testRange, lowerMargin, upperMargin);
+
+		    assertEquals(expectedRange, resultRange);
+		  }
+
+		  @Test
+		  public void testExpandWithNegativeReturnsExpectedRange(){
+		    Range testRange = new Range(2, 6);
+		    double lowerMargin = -0.25;
+		    double upperMargin = -0.5;
+
+		    Range expectedRange = new Range(3,4);
+		    Range resultRange = Range.expand(testRange, lowerMargin, upperMargin);
+
+		    assertEquals(expectedRange, resultRange);
+		  }
+
+		  @Test
+		  public void testExpandWithValuesGreaterThan1ReturnsExpectedRange(){
+		    Range testRange = new Range(1, 2);
+		    double lowerMargin = 1.5 ;
+		    double upperMargin = 10;
+
+		    Range expectedRange = new Range(-0.5,12);
+		    Range resultRange = Range.expand(testRange, lowerMargin, upperMargin);
+
+		    assertEquals(expectedRange, resultRange);
+		  }
+
+		  //equals() Tests
+		  @Test
+		  public void testEqualsWithNullReturnsFalse(){
+		    Range comparisonRange = new Range(1, 8);
+
+		    assertFalse(comparisonRange.equals(null));
+		  }
+
+		  @Test
+		  public void testEqualsWithNonRangeObjectReturnsFalse(){
+		    Range comparisonRange = new Range(1, 8);
+		    String nonRangeObject = "This is not a Range Object";
+
+		    assertFalse(comparisonRange.equals(nonRangeObject));
+		  }
+
+		  @Test
+		  public void testEqualsWithTestRangeWithDifferentLowerBoundReturnsFalse(){
+		    double comparisonLowerBound = 1;
+		    double comparisonUpperBound = 8;
+		    Range comparisonRange = new Range(comparisonLowerBound, comparisonUpperBound);
+		    Range testRange = new Range(0, comparisonUpperBound);
+
+		    assertFalse(comparisonRange.equals(testRange));
+		  }
+
+		  @Test
+		  public void testEqualsWithTestRangeWithDifferentUpperBoundReturnsFalse(){
+		    double comparisonLowerBound = 1;
+		    double comparisonUpperBound = 8;
+		    Range comparisonRange = new Range(comparisonLowerBound, comparisonUpperBound);
+		    Range testRange = new Range(comparisonLowerBound, 9);
+
+		    assertNotSame(testRange, comparisonRange);
+		    assertFalse(comparisonRange.equals(testRange));
+		  }
+
+		  @Test
+		  public void testEqualsComparingARangeWithItselfReturnsTrue(){
+		    double comparisonLowerBound = 1;
+		    double comparisonUpperBound = 8;
+		    Range comparisonRange = new Range(comparisonLowerBound, comparisonUpperBound);
+
+		    assertSame(comparisonRange, comparisonRange);
+		    assertTrue(comparisonRange.equals(comparisonRange));
+		  }
+
+		  @Test
+		  public void testEqualsComparingEquivalentRangeReturnsTrue(){
+		    double comparisonLowerBound = 1;
+		    double comparisonUpperBound = 8;
+		    Range comparisonRange = new Range(comparisonLowerBound, comparisonUpperBound);
+		    Range testRange = new Range(comparisonLowerBound, comparisonUpperBound);
+
+		    assertTrue(comparisonRange.equals(testRange));
+		  }
+
+		  //hashCode() tests
+		  @Test
+		  public void testHashCodeTestingThatTwoDifferentRangeObjectsWithSameRangesReturnSameHashCodes(){
+		    Range testRange = new Range(1, 8);
+		    Range testRange2 = new Range(1, 8);
+
+		    assertNotSame(testRange, testRange2);
+		    assertEquals(testRange, testRange2);
+		    assertEquals(testRange.hashCode(), testRange2.hashCode());
+		  }
+
+		  @Test
+		  public void testHashCodeTestingThatTwoDifferentRangeObjectsWithDifferentRangesReturnDifferentHashCodes(){
+		    Range testRange = new Range(1, 8);
+		    Range testRange2 = new Range(2, 9);
+
+		    assertNotSame(testRange, testRange2);
+		    assertNotEquals(testRange, testRange2);
+		    assertNotEquals(testRange.hashCode(), testRange2.hashCode());
+		  }
 }
