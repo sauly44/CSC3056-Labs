@@ -177,35 +177,35 @@ public class RangeTest extends TestCase {
 	  public void testConstrainWithValueWithinRangeReturnsSpecifiedValue(){
 	    Range testRange = new Range(1, 8);
 	    double testValue = 5;
-	    assertEquals(testValue, testRange.constrain(testValue));
+	    assertEquals("5 is within Range of 1 to 8, so bounds do not change.", testValue, testRange.constrain(testValue), 0.000000001d);
 	  }
 
 	  @Test
 	  public void testConstrainWithValueEqualToUpperBoundReturnsSpecifiedValue(){
 	    Range testRange = new Range(1, 8);
 	    double testValue = 8;
-	    assertEquals(testValue, testRange.constrain(testValue));
+	    assertEquals("8 is equal to current upper bound, so bounds do not change", testValue, testRange.constrain(testValue), 0.000000001d);
 	  }
 
 	  @Test
 	  public void testConstrainWithValueEqualToLowerBoundReturnsSpecifiedValue(){
 	    Range testRange = new Range(1, 8);
 	    double testValue = 1;
-	    assertEquals(testValue, testRange.constrain(testValue));
+	    assertEquals("1 is equal to current lower bound, so bounds do not change.", testValue, testRange.constrain(testValue), 0.000000001d);
 	  }
 
 	  @Test
 	  public void testConstrainWithValueGreaterThanUpperBoundReturnsUpperBound(){
 	    Range testRange = new Range(1, 8);
 	    double testValue = 9;
-	    assertEquals(testRange.getUpperBound(), testRange.constrain(testValue));
+	    assertEquals("9 is greater than the current upperbound, so upper bound is now 9", testRange.getUpperBound(), testRange.constrain(testValue), 0.000000001d);
 	  }
 
 	  @Test
 	  public void testConstrainWithValueLessThanLowerBoundReturnsLowerBound(){
 	    Range testRange = new Range(1, 8);
 	    double testValue = -5;
-	    assertEquals(testRange.getLowerBound(), testRange.constrain(testValue));
+	    assertEquals("-5 is less than the current lower bound, so lower bound is now -5", testRange.getLowerBound(), testRange.constrain(testValue), 0.000000001d);
 	  }
 
 	  //expandToInclude() Tests
@@ -315,18 +315,6 @@ public class RangeTest extends TestCase {
 
 	    Range expectedRange = new Range(-0.5,12);
 	    Range resultRange = Range.expand(testRange, lowerMargin, upperMargin);
-
-	    assertEquals(expectedRange, resultRange);
-	  }
-
-	  @Test
-	  public void testExpandWithValuesOfMinus1ReturnsRangeWithUpperAndLowerBoundSwapped(){
-	    Range testRange = new Range(2, 6);
-	    double lowerMargin = -1;
-	    double upperMargin = -1;
-
-	    Range resultRange = Range.expand(testRange, lowerMargin, upperMargin);
-	    Range expectedRange = new Range(6,2);
 
 	    assertEquals(expectedRange, resultRange);
 	  }

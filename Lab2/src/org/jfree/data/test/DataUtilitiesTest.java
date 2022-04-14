@@ -1,21 +1,17 @@
 package org.jfree.data.test;
 
 import org.jfree.data.DefaultKeyedValues2D;
+import org.jfree.data.KeyedValues;
 import org.jfree.data.Values2D;
 import org.jfree.data.DataUtilities;
+import org.jfree.data.DefaultKeyedValues;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import junit.framework.TestCase;
 
-import java.lang.reflect.Executable;
 import java.security.InvalidParameterException;
-import org.jfree.data.DataUtilities;
-import org.jfree.data.DefaultKeyedValues;
-import org.jfree.data.DefaultKeyedValues2D;
-import org.jfree.data.KeyedValues;
-import org.jfree.data.Values2D;
 
 
 public class DataUtilitiesTest extends TestCase {
@@ -59,16 +55,7 @@ public class DataUtilitiesTest extends TestCase {
     testValues2D.addValue(-2, 3, 1);
     testValues2D.addValue(-3, 4, 0);
 
-    assertEquals(2, DataUtilities.calculateColumnTotal(testValues2D, 1));
-  }
-
-  @Test
-  public void testCalculateColumnTotalRequestingNonExistentColumnShouldReturn0(){
-    DefaultKeyedValues2D testValues = new DefaultKeyedValues2D();
-    testValues.addValue(1, 0, 0);
-    testValues.addValue(4, 1, 1);
-
-    assertEquals(4, DataUtilities.calculateColumnTotal(testValues, 1));
+    assertEquals(2.0, DataUtilities.calculateColumnTotal(testValues2D, 1));
   }
 
   @Test
@@ -80,7 +67,6 @@ public class DataUtilitiesTest extends TestCase {
 		  assertTrue("Correct exception type thrown", e.getClass().equals(InvalidParameterException.class)); 
 	  }
   }
-
 //calculateRowTotal Tests
   @Test
   public void testCalculateRowWithValidDataShouldReturnCorrectTotal() {
@@ -109,16 +95,7 @@ public class DataUtilitiesTest extends TestCase {
     testValues2D.addValue(-2, 1, 2);
     testValues2D.addValue(-3, 0, 3);
 
-    assertEquals(2, DataUtilities.calculateRowTotal(testValues2D, 1));
-  }
-
-  @Test
-  public void testCalculateRowTotalRequestingNonExistentRowShouldReturn0(){
-    DefaultKeyedValues2D testValues = new DefaultKeyedValues2D();
-    testValues.addValue(1, 0, 0);
-    testValues.addValue(4, 1, 1);
-
-    assertEquals(4, DataUtilities.calculateRowTotal(testValues, 1));
+    assertEquals(2.0, DataUtilities.calculateRowTotal(testValues2D, 1));
   }
 
   @Test
